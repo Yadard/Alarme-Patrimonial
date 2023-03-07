@@ -6,13 +6,9 @@
   http://github.com/andresarmento/modbus-arduino
 */
 
-#ifdef ESP32
-#include <WiFi.h>
-#else
-#include <ESP8266WiFi.h>
-#endif
+#include <Arduino.h>
 #include <Modbus.h>
-#include <ModbusIP_ESP8266.h>
+#include <ModbusIP.h>
 
 #define PORTA_PIN 5
 #define PRESENCA_PIN 7
@@ -31,14 +27,14 @@ enum class REGS {
 enum class State { DESARMADO, ARMADO, ALARME };
 
 // ModbusIP object
-ModbusIP mb;
+byte mac[] = {0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
+IPAddress ip(192, 168, 0, 133);
+ModbusIP mb(mac, ip);
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(BAUDRATE);
 
-  Serial.setDebugOutput(true);
-  WiFi.mode(WIFI_AP_STA);
-  mb.config("Alarme Patriomonial", "12345678");
+  mb.setup();
 
   mb.addHreg(static_cast<word>(REGS::SENSOR_PORTA),
              static_cast<int>(State::DESARMADO));

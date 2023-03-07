@@ -2,12 +2,9 @@
     ModbusIP_ESP8266.h - Header for Modbus IP ESP8266 Library
     Copyright (C) 2015 Andr� Sarmento Barbosa
 */
+#include <Ethernet.h>
 #include <Modbus.h>
-#ifdef ESP32
-#include <WiFi.h>
-#else
-#include <ESP8266WiFi.h>
-#endif
+#include <SPI.h>
 
 #ifndef MODBUSIP_ESP8266_H
 #define MODBUSIP_ESP8266_H
@@ -21,13 +18,12 @@ private:
   byte _MBAP[7];
 
 public:
-  ModbusIP();
-  void config(const char *ssid, const char *password);
+  ModbusIP(byte *mac, IPAddress ip) : mac(mac), ip(ip) {}
+  void setup();
   void task();
 
-  IPAddress local_IP{192, 168, 4, 22};
-  IPAddress gateway{192, 168, 4, 9};
-  IPAddress subnet{255, 255, 255, 0};
+  byte *mac;
+  IPAddress ip;
 };
 
 #endif // MODBUSIP_ESP8266_H
