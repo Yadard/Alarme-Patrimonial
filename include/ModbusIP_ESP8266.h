@@ -3,27 +3,31 @@
     Copyright (C) 2015 Andr� Sarmento Barbosa
 */
 #include <Modbus.h>
+#ifdef ESP32
+#include <WiFi.h>
+#else
 #include <ESP8266WiFi.h>
+#endif
 
 #ifndef MODBUSIP_ESP8266_H
 #define MODBUSIP_ESP8266_H
 
-#define MODBUSIP_PORT 	  502
+#define MODBUSIP_PORT 502
 #define MODBUSIP_MAXFRAME 200
-#define MODBUSIP_TIMEOUT   10
+#define MODBUSIP_TIMEOUT 10
 
 class ModbusIP : public Modbus {
-    private:
-        byte _MBAP[7];
-    public:
-        ModbusIP();
-        void config(const char* ssid, const char* password);
-        void task();
+private:
+  byte _MBAP[7];
 
-        IPAddress local_IP{192,168,4,22};
-        IPAddress gateway{192,168,4,9};
-        IPAddress subnet{255,255,255,0};
+public:
+  ModbusIP();
+  void config(const char *ssid, const char *password);
+  void task();
+
+  IPAddress local_IP{192, 168, 4, 22};
+  IPAddress gateway{192, 168, 4, 9};
+  IPAddress subnet{255, 255, 255, 0};
 };
 
-#endif //MODBUSIP_ESP8266_H
-
+#endif // MODBUSIP_ESP8266_H
